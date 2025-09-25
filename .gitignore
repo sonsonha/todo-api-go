@@ -1,0 +1,14 @@
+# Binaries
+bin/
+*.exe
+*.out
+
+# IDE
+.vscode/
+.idea/
+
+# Dependencies
+go.sum
+
+# Env
+.env
