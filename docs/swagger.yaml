@@ -1,0 +1,9 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  description: A simple Todo API built with Go, Chi, Postgres, sqlc, and Goose.
+  title: Todo API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

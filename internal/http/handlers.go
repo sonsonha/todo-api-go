@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/sonsonha/todo-api-go/internal/domain"
 	"github.com/sonsonha/todo-api-go/internal/store"
 )
 
@@ -34,6 +35,17 @@ func (h *Handler) RegisterRoutes(r chi.Router) {
 }
 
 // CreateTodo handler (POST /todos)
+// CreateTodo godoc
+// @Summary      Create a new todo
+// @Description  Create a new todo with a title
+// @Tags         todos
+// @Accept       json
+// @Produce      json
+// @Param        todo  body   struct{Title string `json:"title"`}  true  "Todo request"
+// @Success      200   {object}  domain.Todo
+// @Failure      400   {string}  string "invalid request"
+// @Failure      500   {string}  string "internal error"
+// @Router       /todos [post]
 func (h *Handler) CreateTodo(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Title string `json:"title"`
@@ -55,6 +67,17 @@ func (h *Handler) CreateTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 // ListTodos handler (GET /todos?limit=10&offset=0)
+// ListTodos godoc
+// @Summary      List todos
+// @Description  Get a list of todos with pagination
+// @Tags         todos
+// @Accept       json
+// @Produce      json
+// @Param        limit   query   int  false  "Limit"
+// @Param        offset  query   int  false  "Offset"
+// @Success      200     {array} domain.Todo
+// @Failure      500     {string} string "internal error"
+// @Router       /todos [get]
 func (h *Handler) ListTodos(w http.ResponseWriter, r *http.Request) {
 	limitStr := r.URL.Query().Get("limit")
 	offsetStr := r.URL.Query().Get("offset")
@@ -79,6 +102,18 @@ func (h *Handler) ListTodos(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetTodo handler (GET /todos/{id})
+// GetTodo godoc
+// @Summary      Get a todo by ID
+// @Description  Get details of a specific todo
+// @Tags         todos
+// @Accept       json
+// @Produce      json
+// @Param        id   path   int  true  "Todo ID"
+// @Success      200  {object} domain.Todo
+// @Failure      400  {string} string "invalid id"
+// @Failure      404  {string} string "not found"
+// @Failure      500  {string} string "internal error"
+// @Router       /todos/{id} [get]
 func (h *Handler) GetTodo(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -98,6 +133,22 @@ func (h *Handler) GetTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 // UpdateTodo handler (PATCH /todos/{id})
+// UpdateTodo godoc
+// @Summary      Update a todo
+// @Description  Update title and completion status of a todo
+// @Tags         todos
+// @Accept       json
+// @Produce      json
+// @Param        id    path   int  true  "Todo ID"
+// @Param        todo  body   struct{
+// @Param        Title  string `json:"title"`
+// @Param        IsDone bool   `json:"is_done"`
+// } true "Update request"
+// @Success      200   {object} domain.Todo
+// @Failure      400   {string} string "invalid request"
+// @Failure      404   {string} string "not found"
+// @Failure      500   {string} string "internal error"
+// @Router       /todos/{id} [patch]
 func (h *Handler) UpdateTodo(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -131,6 +182,17 @@ func (h *Handler) UpdateTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 // DeleteTodo handler (DELETE /todos/{id})
+// DeleteTodo godoc
+// @Summary      Delete a todo
+// @Description  Delete a todo by ID
+// @Tags         todos
+// @Accept       json
+// @Produce      json
+// @Param        id   path   int  true  "Todo ID"
+// @Success      204  {string} string "no content"
+// @Failure      400  {string} string "invalid id"
+// @Failure      500  {string} string "internal error"
+// @Router       /todos/{id} [delete]
 func (h *Handler) DeleteTodo(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -147,3 +209,6 @@ func (h *Handler) DeleteTodo(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNoContent)
 }
+
+// keep domain.Todo import for Swagger
+var _ domain.Todo
